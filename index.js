@@ -3,8 +3,6 @@ const purse = require('./commands/purse.command')
 require('dotenv').config()
 const client = new Discord.Client()
 
-const { BOT_TOKEN, PREFIX } = process.env
-
 client.on('message', function (message) {
   if (message.author.bot) return
 
@@ -14,9 +12,9 @@ client.on('message', function (message) {
   }
   const command = args.shift().toLowerCase()
 
-  if (command === `${PREFIX}purse`) {
+  if (command === `${process.env.PREFIX}purse`) {
     purse(message, args)
   }
 })
 
-client.login(BOT_TOKEN)
+client.login(process.env.BOT_TOKEN)
