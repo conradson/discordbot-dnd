@@ -1,8 +1,8 @@
 const Discord = require('discord.js')
-const purseCommand = require('./commands/purse.command')
 require('dotenv').config()
-const client = new Discord.Client()
+const { purse } = require('./commands')
 
+const client = new Discord.Client()
 client.on('message', function (message) {
   if (message.author.bot) return
 
@@ -17,7 +17,7 @@ client.on('message', function (message) {
     (process.env.PURSE_SHORT_COMMAND &&
       command === `${prefix}${process.env.PURSE_SHORT_COMMAND}`)
   ) {
-    purseCommand(message, args)
+    purse(message, args)
   }
 })
 

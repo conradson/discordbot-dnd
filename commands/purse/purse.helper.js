@@ -1,6 +1,6 @@
 var { sprintf } = require('sprintf-js')
-const constants = require('../constants/purse.constant')
-const locales = require('../locales/purse.locale')
+const constants = require('./purse.constant')
+const locales = require('./purse.locale')
 
 exports.purseToCopper = (purse) => {
   return (

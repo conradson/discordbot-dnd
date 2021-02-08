@@ -1,7 +1,7 @@
 const { Sequelize } = require('sequelize')
 require('dotenv').config()
 
-const sequelize = new Sequelize(
+module.exports = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
   process.env.BD_PASSWORD,
@@ -12,8 +12,3 @@ const sequelize = new Sequelize(
     storage: 'database.sqlite',
   }
 )
-
-require('./models/purse.model')(sequelize)
-sequelize.sync()
-
-module.exports = sequelize

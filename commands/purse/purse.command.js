@@ -1,16 +1,10 @@
-const {
-  load,
-  reset,
-  gain,
-  pay,
-  set,
-} = require('../controllers/purse.controller')
+const { load, reset, gain, pay, set } = require('./purse.controller')
 const {
   purseTotal,
   purseContent,
   purseTransaction,
   notEnoughMoney,
-} = require('../helpers/purse.helper')
+} = require('./purse.helper')
 
 module.exports = async (message, args) => {
   const {

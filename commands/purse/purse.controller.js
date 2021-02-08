@@ -1,9 +1,10 @@
-const { models } = require('../sequelize')
+const purseModel = require('./purse.model')
 const {
   purseToCopper,
   amountToCopper,
   amountToPurse,
-} = require('../helpers/purse.helper')
+} = require('./purse.helper')
+const locales = require('./purse.locale')
 
 class PurseController {
   constructor() {
@@ -15,11 +16,11 @@ class PurseController {
   }
 
   async load(authorId) {
-    let purse = await models.purse.findOne({
+    let purse = await purseModel.findOne({
       where: { authorId: authorId },
     })
     if (!purse) {
-      purse = await models.purse.create({
+      purse = await purseModel.create({
         authorId: authorId,
         cp: 0,
         sp: 0,
@@ -46,15 +47,15 @@ class PurseController {
     const purse = await this.load(authorId)
     for (const type of amount.split(' ')) {
       const value = parseInt(type.replace(/\D/g, ''))
-      if (type.endsWith('pp')) {
+      if (type.endsWith(locales.pp)) {
         purse.pp = value
-      } else if (type.endsWith('gp')) {
+      } else if (type.endsWith(locales.gp)) {
         purse.gp = value
-      } else if (type.endsWith('ep')) {
+      } else if (type.endsWith(locales.ep)) {
         purse.ep = value
-      } else if (type.endsWith('sp')) {
+      } else if (type.endsWith(locales.sp)) {
         purse.sp = value
-      } else if (type.endsWith('cp')) {
+      } else if (type.endsWith(locales.cp)) {
         purse.cp = value
       }
     }

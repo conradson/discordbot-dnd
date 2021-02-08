@@ -1,5 +1,5 @@
 require('dotenv').config()
-const locales = require('../locales/purse.locale')
+const locales = require('./purse.locale')
 
 const PP_EMOJI = process.env.PP_EMOJI || locales.pp
 const GP_EMOJI = process.env.GP_EMOJI || locales.gp
