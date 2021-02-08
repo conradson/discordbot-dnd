@@ -9,6 +9,7 @@ const {
   purseTotal,
   purseContent,
   purseTransaction,
+  notEnoughMoney,
 } = require('../helpers/purse.helper')
 
 module.exports = async (message, args) => {
@@ -39,7 +40,7 @@ module.exports = async (message, args) => {
         )}\n${purseContent(purseTotal(update), username)}`
       )
     } catch (error) {
-      channel.send(`${username} doesn't have enough money.`)
+      channel.send(notEnoughMoney(username))
     }
     return
   } else {

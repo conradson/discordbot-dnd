@@ -1,3 +1,7 @@
+var { sprintf } = require('sprintf-js')
+const constants = require('../constants/purse.constant')
+const locales = require('../locales/purse.locale')
+
 exports.purseToCopper = (purse) => {
   return (
     purse.pp * 1000 + purse.gp * 100 + purse.ep * 50 + purse.sp * 10 + purse.cp
@@ -8,15 +12,15 @@ exports.amountToCopper = (amount) => {
   let total = 0
   for (const type of amount.split(' ')) {
     const value = parseInt(type.replace(/\D/g, ''))
-    if (type.endsWith('pp')) {
+    if (type.endsWith(locales.pp)) {
       total += value * 1000
-    } else if (type.endsWith('gp') || type.endsWith('po')) {
+    } else if (type.endsWith(locales.gp)) {
       total += value * 100
-    } else if (type.endsWith('ep') || type.endsWith('pe')) {
+    } else if (type.endsWith(locales.ep)) {
       total += value * 50
-    } else if (type.endsWith('sp') || type.endsWith('pa')) {
+    } else if (type.endsWith(locales.sp)) {
       total += value * 10
-    } else if (type.endsWith('cp') || type.endsWith('pc')) {
+    } else if (type.endsWith(locales.cp)) {
       total += value
     }
   }
@@ -33,15 +37,15 @@ exports.amountToPurse = (amount) => {
   }
   for (const type of amount.split(' ')) {
     const value = parseInt(type.replace(/\D/g, ''))
-    if (type.endsWith('pp')) {
+    if (type.endsWith(locales.pp)) {
       purse.pp = value
-    } else if (type.endsWith('gp') || type.endsWith('po')) {
+    } else if (type.endsWith(locales.gp)) {
       purse.gp = value
-    } else if (type.endsWith('ep') || type.endsWith('pe')) {
+    } else if (type.endsWith(locales.ep)) {
       purse.ep = value
-    } else if (type.endsWith('sp') || type.endsWith('pa')) {
+    } else if (type.endsWith(locales.sp)) {
       purse.sp = value
-    } else if (type.endsWith('cp') || type.endsWith('pc')) {
+    } else if (type.endsWith(locales.cp)) {
       purse.cp = value
     }
   }
@@ -51,35 +55,39 @@ exports.amountToPurse = (amount) => {
 exports.purseTotal = (purse) => {
   let total = []
   if (purse.pp > 0) {
-    total.push(`${purse.pp}pp`)
+    total.push(`${purse.pp}${constants.PP_EMOJI}`)
   }
   if (purse.gp > 0) {
-    total.push(`${purse.gp}gp`)
+    total.push(`${purse.gp}${constants.GP_EMOJI}`)
   }
   if (purse.ep > 0) {
-    total.push(`${purse.ep}ep`)
+    total.push(`${purse.ep}${constants.EP_EMOJI}`)
   }
   if (purse.sp > 0) {
-    total.push(`${purse.sp}sp`)
+    total.push(`${purse.sp}${constants.SP_EMOJI}`)
   }
   if (purse.cp > 0) {
-    total.push(`${purse.cp}cp`)
+    total.push(`${purse.cp}${constants.CP_EMOJI}`)
   }
   return total
 }
 
 exports.purseContent = (currency, username) => {
-  let result = `${username}'s purse is empty.`
+  let result = sprintf(locales.purse_empty, username)
   if (currency.length > 0) {
-    result = `${username}'s purse contains : ${currency.join(', ')}`
+    result = sprintf(locales.purse_contains, username, currency.join(', '))
   }
   return result
 }
 
 exports.purseTransaction = (paid, change, username) => {
-  let result = `${username} pays : ${paid.join(', ')}`
+  let result = sprintf(locales.paids, username, paid.join(', '))
   if (change.length) {
-    result += ` and receives : ${change.join(', ')}`
+    result += sprintf(locales.receives, change.join(', '))
   }
   return result
+}
+
+exports.notEnoughMoney = (username) => {
+  return sprintf(locales.not_enough_money, username)
 }

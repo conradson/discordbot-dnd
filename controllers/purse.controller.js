@@ -65,7 +65,6 @@ class PurseController {
   async gain(authorId, amount) {
     const purse = await this.load(authorId)
     const gain = amountToPurse(amount)
-    console.log('gain', gain)
     purse.pp += gain.pp
     purse.gp += gain.gp
     purse.ep += gain.ep
