@@ -1,27 +1,16 @@
 const purseModel = require('./purse.model')
-const {
-  purseToCopper,
-  amountToCopper,
-  amountToPurse,
-} = require('./purse.helper')
+const helper = require('./purse.helper')
 const locales = require('./purse.locale')
 
 class PurseController {
-  constructor() {
-    this.load = this.load.bind(this)
-    this.reset = this.reset.bind(this)
-    this.set = this.set.bind(this)
-    this.gain = this.gain.bind(this)
-    this.pay = this.pay.bind(this)
-  }
-
-  async load(authorId) {
+  async load(authorId, character) {
     let purse = await purseModel.findOne({
-      where: { authorId: authorId },
+      where: { authorId: authorId, character: character },
     })
     if (!purse) {
       purse = await purseModel.create({
         authorId: authorId,
+        character: character,
         cp: 0,
         sp: 0,
         ep: 0,
@@ -32,8 +21,8 @@ class PurseController {
     return purse
   }
 
-  async reset(authorId) {
-    const purse = await this.load(authorId)
+  async reset(authorId, character) {
+    const purse = await this.load(authorId, character)
     purse.pp = 0
     purse.gp = 0
     purse.ep = 0
@@ -43,8 +32,8 @@ class PurseController {
     return purse
   }
 
-  async set(authorId, amount) {
-    const purse = await this.load(authorId)
+  async set(authorId, character, amount) {
+    const purse = await this.load(authorId, character)
     for (const type of amount.split(' ')) {
       const value = parseInt(type.replace(/\D/g, ''))
       if (type.endsWith(locales.pp)) {
@@ -63,9 +52,9 @@ class PurseController {
     return purse
   }
 
-  async gain(authorId, amount) {
-    const purse = await this.load(authorId)
-    const gain = amountToPurse(amount)
+  async gain(authorId, character, amount) {
+    const purse = await this.load(authorId, character)
+    const gain = helper.amountToPurse(amount)
     purse.pp += gain.pp
     purse.gp += gain.gp
     purse.ep += gain.ep
@@ -75,8 +64,8 @@ class PurseController {
     return purse
   }
 
-  async pay(authorId, amount) {
-    const purse = await this.load(authorId)
+  async pay(authorId, character, amount) {
+    const purse = await this.load(authorId, character)
     const stash = {
       pp: purse.pp,
       gp: purse.gp,
@@ -84,13 +73,13 @@ class PurseController {
       sp: purse.sp,
       cp: purse.cp,
     }
-    const money = purseToCopper(stash)
-    const total = amountToCopper(amount)
+    const money = helper.purseToCopper(stash)
+    const total = helper.amountToCopper(amount)
 
     if (total > money) {
       throw new Error('Not enough money')
     }
-    const bill = amountToPurse(amount)
+    const bill = helper.amountToPurse(amount)
     const paid = {
       pp: 0,
       gp: 0,
@@ -110,7 +99,7 @@ class PurseController {
     paid.cp += Math.min(bill.cp, stash.cp)
     stash.cp -= paid.cp
 
-    while (purseToCopper(bill) > purseToCopper(paid)) {
+    while (helper.purseToCopper(bill) > helper.purseToCopper(paid)) {
       if (stash.cp > 0) {
         paid.cp += stash.cp
         stash.cp = 0
@@ -128,7 +117,7 @@ class PurseController {
         stash.pp = 0
       }
     }
-    let diff = purseToCopper(paid) - purseToCopper(bill)
+    let diff = helper.purseToCopper(paid) - helper.purseToCopper(bill)
     const change = {
       pp: 0,
       gp: 0,

@@ -1,6 +1,7 @@
 var { sprintf } = require('sprintf-js')
 const constants = require('./purse.constant')
 const locales = require('./purse.locale')
+const { capitalize } = require('../../helpers/string.helpers')
 
 exports.purseToCopper = (purse) => {
   return (
@@ -72,22 +73,46 @@ exports.purseTotal = (purse) => {
   return total
 }
 
-exports.purseContent = (currency, username) => {
-  let result = sprintf(locales.purse_empty, username)
+exports.purseContent = (currency, character) => {
+  let result = sprintf(locales.purse_empty, capitalize(character))
   if (currency.length > 0) {
-    result = sprintf(locales.purse_contains, username, currency.join(', '))
+    result = sprintf(
+      locales.purse_contains,
+      capitalize(character),
+      currency.join(', ')
+    )
   }
   return result
 }
 
-exports.purseTransaction = (paid, change, username) => {
-  let result = sprintf(locales.paids, username, paid.join(', '))
+exports.purseTransaction = (paid, change, character) => {
+  let result = sprintf(locales.paids, capitalize(character), paid.join(', '))
   if (change.length) {
     result += sprintf(locales.receives, change.join(', '))
   }
   return result
 }
 
-exports.notEnoughMoney = (username) => {
-  return sprintf(locales.not_enough_money, username)
+exports.notEnoughMoney = (character) => {
+  return sprintf(locales.not_enough_money, capitalize(character))
+}
+
+exports.help = () => {
+  return sprintf(
+    locales.help,
+    process.env.PREFIX || '!',
+    process.env.PURSE_SHORT_COMMAND || process.env.PURSE_COMMAND || 'purse'
+  )
+}
+
+exports.noCharacterSelected = () => {
+  return sprintf(
+    locales.no_character_selected,
+    process.env.PREFIX || '!',
+    process.env.PURSE_SHORT_COMMAND || process.env.PURSE_COMMAND || 'purse'
+  )
+}
+
+exports.invalidCommand = () => {
+  return locales.invalid_command
 }

@@ -6,6 +6,10 @@ const model = sequelize.define('purse', {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  character: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   cp: {
     type: DataTypes.INTEGER,
     allowNull: false,
