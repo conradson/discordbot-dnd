@@ -1,6 +1,13 @@
+const express = require('express')
 const Discord = require('discord.js')
 require('dotenv').config()
 const { purse } = require('./commands')
+const app = express()
+
+const PORT = process.env.PORT || 8080
+app.listen(PORT, () => {
+  console.log(`DnDbot is running on port ${PORT}`)
+})
 
 const client = new Discord.Client()
 client.on('message', function (message) {
