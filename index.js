@@ -17,7 +17,7 @@ client.on('message', function (message) {
   if (!args || !args.length) {
     return
   }
-  const prefix = process.env.PREFIX || '!'
+  const prefix = process.env.PREFIX || '/'
   const command = args.shift().toLowerCase()
   if (
     command === `${prefix}${process.env.PURSE_COMMAND || 'purse'}` ||

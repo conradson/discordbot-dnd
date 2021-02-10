@@ -3,7 +3,7 @@ const sequelize = require('../../sequelize')
 
 const model = sequelize.define('purse', {
   authorId: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.BIGINT,
     allowNull: false,
   },
   character: {

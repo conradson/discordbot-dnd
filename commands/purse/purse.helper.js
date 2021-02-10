@@ -100,7 +100,7 @@ exports.notEnoughMoney = (character) => {
 exports.help = () => {
   return sprintf(
     locales.help,
-    process.env.PREFIX || '!',
+    process.env.PREFIX || '/',
     process.env.PURSE_SHORT_COMMAND || process.env.PURSE_COMMAND || 'purse'
   )
 }
@@ -108,7 +108,7 @@ exports.help = () => {
 exports.noCharacterSelected = () => {
   return sprintf(
     locales.no_character_selected,
-    process.env.PREFIX || '!',
+    process.env.PREFIX || '/',
     process.env.PURSE_SHORT_COMMAND || process.env.PURSE_COMMAND || 'purse'
   )
 }
