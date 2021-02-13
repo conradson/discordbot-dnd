@@ -1,4 +1,4 @@
-const configRepository = require('../repositories/config.repository')
+const configRepository = require('./config.repository')
 
 module.exports = async (message, args) => {
   const { channel, member } = message

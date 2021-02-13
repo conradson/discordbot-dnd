@@ -1,4 +1,4 @@
-const configModel = require('../models/config.model')
+const configModel = require('./config.model')
 
 class ConfigRepository {
   async init(channelId) {

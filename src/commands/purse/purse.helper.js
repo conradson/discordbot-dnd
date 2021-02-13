@@ -1,5 +1,5 @@
 const i18n = require('i18n')
-const constants = require('../constants/purse.constant')
+const constants = require('./purse.constant')
 
 module.exports = {
   purseToCopper(purse) {

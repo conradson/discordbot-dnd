@@ -1,6 +1,6 @@
 const i18n = require('i18n')
-const purseModel = require('../models/purse.model')
-const purseHelper = require('../helpers/purse.helper')
+const purseModel = require('./purse.model')
+const purseHelper = require('./purse.helper')
 
 class PurseRepository {
   async init(authorId, character) {

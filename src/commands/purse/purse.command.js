@@ -1,7 +1,7 @@
 const i18n = require('i18n')
-const { capitalize } = require('../helpers/string.helper')
-const purseRepository = require('../repositories/purse.repository')
-const purseHelper = require('../helpers/purse.helper')
+const { capitalize } = require('../../helpers/string.helper')
+const purseRepository = require('./purse.repository')
+const purseHelper = require('./purse.helper')
 
 module.exports = async (message, args) => {
   const {

@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize')
-const sequelize = require('../sequelize/config')
+const sequelize = require('../../sequelize/config')
 
 module.exports = sequelize.define('config', {
   channelId: {

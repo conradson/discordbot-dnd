@@ -2,9 +2,9 @@ const Discord = require('discord.js')
 const i18n = require('i18n')
 const path = require('path')
 require('dotenv').config()
-const configRepository = require('./repositories/config.repository')
-const configCommand = require('./commands/config.command')
-const purseCommand = require('./commands/purse.command')
+const configRepository = require('./commands/config/config.repository')
+const configCommand = require('./commands/config/config.command')
+const purseCommand = require('./commands/purse/purse.command')
 
 i18n.configure({
   locales: ['en', 'fr'],
