@@ -1,9 +1,11 @@
-const purseModel = require('./purse.model')
-const helper = require('./purse.helper')
-const locales = require('./purse.locale')
+const purseModel = require('../models/purse.model')
 
-class PurseController {
-  async load(authorId, character) {
+class PurseRepository {
+  async init(authorId, character, locales, helper) {
+    this.locales = locales
+    this.helper = helper
+
+    purseModel.sync()
     let purse = await purseModel.findOne({
       where: { authorId: authorId, character: character },
     })
@@ -18,68 +20,64 @@ class PurseController {
         pp: 0,
       })
     }
-    return purse
+    this.purse = purse
   }
 
-  async reset(authorId, character) {
-    const purse = await this.load(authorId, character)
-    purse.pp = 0
-    purse.gp = 0
-    purse.ep = 0
-    purse.sp = 0
-    purse.cp = 0
-    await purse.save()
-    return purse
+  async reset() {
+    this.purse.pp = 0
+    this.purse.gp = 0
+    this.purse.ep = 0
+    this.purse.sp = 0
+    this.purse.cp = 0
+    await this.purse.save()
+    return this.purse
   }
 
-  async set(authorId, character, amount) {
-    const purse = await this.load(authorId, character)
+  async set(amount) {
     for (const type of amount.split(' ')) {
       const value = parseInt(type.replace(/\D/g, ''))
-      if (type.endsWith(locales.pp)) {
-        purse.pp = value
-      } else if (type.endsWith(locales.gp)) {
-        purse.gp = value
-      } else if (type.endsWith(locales.ep)) {
-        purse.ep = value
-      } else if (type.endsWith(locales.sp)) {
-        purse.sp = value
-      } else if (type.endsWith(locales.cp)) {
-        purse.cp = value
+      if (type.endsWith(this.locales.pp)) {
+        this.purse.pp = value
+      } else if (type.endsWith(this.locales.gp)) {
+        this.purse.gp = value
+      } else if (type.endsWith(this.locales.ep)) {
+        this.purse.ep = value
+      } else if (type.endsWith(this.locales.sp)) {
+        this.purse.sp = value
+      } else if (type.endsWith(this.locales.cp)) {
+        this.purse.cp = value
       }
     }
-    await purse.save()
-    return purse
+    await this.purse.save()
+    return this.purse
   }
 
-  async gain(authorId, character, amount) {
-    const purse = await this.load(authorId, character)
-    const gain = helper.amountToPurse(amount)
-    purse.pp += gain.pp
-    purse.gp += gain.gp
-    purse.ep += gain.ep
-    purse.sp += gain.sp
-    purse.cp += gain.cp
-    await purse.save()
-    return purse
+  async gain(amount) {
+    const gain = this.helper.amountToPurse(amount)
+    this.purse.pp += gain.pp
+    this.purse.gp += gain.gp
+    this.purse.ep += gain.ep
+    this.purse.sp += gain.sp
+    this.purse.cp += gain.cp
+    await this.purse.save()
+    return this.purse
   }
 
-  async pay(authorId, character, amount) {
-    const purse = await this.load(authorId, character)
+  async pay(amount) {
     const stash = {
-      pp: purse.pp,
-      gp: purse.gp,
-      ep: purse.ep,
-      sp: purse.sp,
-      cp: purse.cp,
+      pp: this.purse.pp,
+      gp: this.purse.gp,
+      ep: this.purse.ep,
+      sp: this.purse.sp,
+      cp: this.purse.cp,
     }
-    const money = helper.purseToCopper(stash)
-    const total = helper.amountToCopper(amount)
+    const money = this.helper.purseToCopper(stash)
+    const total = this.helper.amountToCopper(amount)
 
     if (total > money) {
       throw new Error('Not enough money')
     }
-    const bill = helper.amountToPurse(amount)
+    const bill = this.helper.amountToPurse(amount)
     const paid = {
       pp: 0,
       gp: 0,
@@ -99,7 +97,7 @@ class PurseController {
     paid.cp += Math.min(bill.cp, stash.cp)
     stash.cp -= paid.cp
 
-    while (helper.purseToCopper(bill) > helper.purseToCopper(paid)) {
+    while (this.helper.purseToCopper(bill) > this.helper.purseToCopper(paid)) {
       if (stash.cp > 0) {
         paid.cp += stash.cp
         stash.cp = 0
@@ -117,7 +115,7 @@ class PurseController {
         stash.pp = 0
       }
     }
-    let diff = helper.purseToCopper(paid) - helper.purseToCopper(bill)
+    let diff = this.helper.purseToCopper(paid) - this.helper.purseToCopper(bill)
     const change = {
       pp: 0,
       gp: 0,
@@ -160,15 +158,15 @@ class PurseController {
       }
     }
 
-    purse.pp = purse.pp - paid.pp + change.pp
-    purse.gp = purse.gp - paid.gp + change.gp
-    purse.ep = purse.ep - paid.ep + change.ep
-    purse.sp = purse.sp - paid.sp + change.sp
-    purse.cp = purse.cp - paid.cp + change.cp
+    this.purse.pp = this.purse.pp - paid.pp + change.pp
+    this.purse.gp = this.purse.gp - paid.gp + change.gp
+    this.purse.ep = this.purse.ep - paid.ep + change.ep
+    this.purse.sp = this.purse.sp - paid.sp + change.sp
+    this.purse.cp = this.purse.cp - paid.cp + change.cp
 
-    await purse.save()
-    return { paid: paid, change: change, update: purse }
+    await this.purse.save()
+    return { paid: paid, change: change, update: this.purse }
   }
 }
 
-module.exports = new PurseController()
+module.exports = new PurseRepository()

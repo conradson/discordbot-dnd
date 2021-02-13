@@ -1,7 +1,5 @@
-require('dotenv').config()
-
-const locales = {
-  english: {
+module.exports = {
+  en: {
     pp: 'pp',
     gp: 'gp',
     ep: 'ep',
@@ -19,7 +17,7 @@ const locales = {
     help:
       "You need to begin all your commands with your character's name (without spaces), eg: `%1$s%2$s hagark`\n\nCommand list:\n- see the content of your purse, eg: `%1$s%2$s *name*`\n- **s**et: set your purse to a specific amount, eg: `%1$s%2$s *name* s 6gp 13sp 52cp`\n- **r**eset: empty your purse, eg: `%1$s%2$s *name* r`\n- **g**ain: add money to your purse, eg: `%1$s%2$s *name* g 2gp 1sp`\n- **p**ay: pay an amount with your purse, eg: `%1$s%2$s *name* p 23sp 7cp`",
   },
-  french: {
+  fr: {
     pp: 'pp',
     gp: 'po',
     ep: 'pe',
@@ -38,7 +36,3 @@ const locales = {
       'Vous devez précéder chaque commande du prénom de votre personnage (sans espaces), eg: `%1$s%2$s hagark`\n\n**Liste des commandes :**\n- voir le contenu de votre porte-monnaie, eg: `%1$s%2$s *name*`\n- **s**et: défini une valeur précise à votre porte-monnaie, eg: `%1$s%2$s *name* s 6po 13pa 52pc`\n- **r**eset: vide votre porte-monnaie, eg: `%1$s%2$s *name* r`\n- **g**ain: ajoute des pièces à votre porte-monnaie, eg: `%1$s%2$s *name* g 2po 1pa`\n- **p**ay: paye une somme avec votre porte-monnaie, eg: `%1$s%2$s *name* p 23pa 7pc`',
   },
 }
-
-const language =
-  process.env.LANGUAGE in locales ? process.env.LANGUAGE : 'english'
-module.exports = locales[language]

@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize')
-const sequelize = require('../../sequelize')
+const sequelize = require('../sequelize')
 
-const model = sequelize.define('purse', {
+module.exports = sequelize.define('purse', {
   authorId: {
     type: DataTypes.BIGINT,
     allowNull: false,
@@ -31,7 +31,3 @@ const model = sequelize.define('purse', {
     allowNull: false,
   },
 })
-
-model.sync()
-
-module.exports = model

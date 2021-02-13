@@ -1,0 +1,5 @@
+exports.PP_EMOJI = ':medal:'
+exports.GP_EMOJI = ':first_place:'
+exports.EP_EMOJI = ':military_medal:'
+exports.SP_EMOJI = ':second_place:'
+exports.CP_EMOJI = ':third_place:'

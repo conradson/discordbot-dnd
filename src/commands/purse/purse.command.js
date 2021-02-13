@@ -1,12 +1,17 @@
-const controler = require('./purse.controller')
-const helper = require('./purse.helper')
+const configRepository = require('../../repositories/config.repository')
+const purseRepository = require('../../repositories/purse.repository')
+const locales = require('./purse.locales')
+const PurseHelper = require('./purse.helper')
 
 module.exports = async (message, args) => {
   const {
     channel,
     author: { id: authorId },
   } = message
-  let purse
+  const { id: channelId } = channel
+  await configRepository.init(channelId)
+  const locale = await configRepository.getLocale()
+  const helper = new PurseHelper(locales[locale])
   if (args.length < 1 || args[0] === 'help' || args[0] === 'h') {
     channel.send(helper.help())
     return
@@ -17,31 +22,21 @@ module.exports = async (message, args) => {
     channel.send(helper.noCharacterSelected())
     return
   }
-  if (args.length < 1) {
-    purse = await controler.load(authorId, character)
-  } else if (args[0] === 'set' || args[0] === 's') {
-    purse = await controler.set(
-      authorId,
-      character,
-      args.join(' ').toLowerCase()
-    )
+  await purseRepository.init(authorId, character, locales[locale], helper)
+
+  const amount = args.join(' ').toLowerCase()
+  let purse = purseRepository.purse
+  if (args[0] === 'set' || args[0] === 's') {
+    purse = await purseRepository.set(amount)
   } else if (args[0] === 'reset' || args[0] === 'r') {
-    purse = await controler.reset(authorId, character)
+    purse = await purseRepository.reset()
   } else if (args[0] === 'gain' || args[0] === 'g') {
     args.shift()
-    purse = await controler.gain(
-      authorId,
-      character,
-      args.join(' ').toLowerCase()
-    )
+    purse = await purseRepository.gain(amount)
   } else if (args[0] === 'pay' || args[0] === 'p') {
     args.shift()
     try {
-      const { paid, change, update } = await controler.pay(
-        authorId,
-        character,
-        args.join(' ').toLowerCase()
-      )
+      const { paid, change, update } = await purseRepository.pay(amount)
       channel.send(
         `${helper.purseTransaction(
           helper.purseTotal(paid),
@@ -53,7 +48,7 @@ module.exports = async (message, args) => {
       channel.send(helper.notEnoughMoney(character))
     }
     return
-  } else {
+  } else if (args.length > 0) {
     channel.send(helper.invalidCommand())
     return
   }
