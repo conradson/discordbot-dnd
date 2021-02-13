@@ -1,0 +1,15 @@
+{
+  "pp": "pp",
+  "gp": "po",
+  "ep": "pe",
+  "sp": "pa",
+  "cp": "pc",
+  "%s's purse is empty.": "Le porte-monnaie de %s est vide.",
+  "%1$s's purse contains: %2$s": "Le porte-monnaie de %1$s contient : %2$s",
+  "%1$s paids %2$s": "%1$s a payé %2$s",
+  "and receives %s": "et reçoit %s",
+  "%s doesn't have enough money.": "%s n'a pas assez d'argent.",
+  "Please specify your character name, eg: `!purse hagark`": "Merci de préciser le nom de votre personnage, ex: `!purse hagark`",
+  "Invalid command, use one of the following: set, reset, gain, pay": "Commande invalide, elle doit figurer parmi: set, reset, gain, pay",
+  "You need to begin all your commands with your character's name (without spaces), eg: `!purse hagark`\n\nCommand list:\n- see the content of your purse, eg: `!purse *name*`\n- **s**et: set your purse to a specific amount, eg: `!purse *name* s 6gp 13sp 52cp`\n- **r**eset: empty your purse, eg: `!purse *name* r`\n- **g**ain: add money to your purse, eg: `!purse *name* g 2gp 1sp`\n- **p**ay: pay an amount with your purse, eg: `!purse *name* p 23sp 7cp`": "Vous devez précéder chaque commande du prénom de votre personnage (sans espaces), eg: `!purse hagark`\n\n**Liste des commandes :**\n- voir le contenu de votre porte-monnaie, eg: `!purse *name*`\n- **s**et: défini une valeur précise à votre porte-monnaie, eg: `!purse *name* s 6po 13pa 52pc`\n- **r**eset: vide votre porte-monnaie, eg: `!purse *name* r`\n- **g**ain: ajoute des pièces à votre porte-monnaie, eg: `!purse *name* g 2po 1pa`\n- **p**ay: paye une somme avec votre porte-monnaie, eg: `!purse *name* p 23pa 7pc`"
+}
