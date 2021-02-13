@@ -24,10 +24,10 @@ module.exports = async (message, args) => {
   const value = args.length > 0 ? args.shift().toLowerCase() : null
   if (commandsLocale.includes(setting)) {
     if (!value) {
-      channel.send(`TODO locale is ${await configRepository.getLocale()}`)
+      channel.send(`TODO locale is ${configRepository.getLocale()}`)
     } else if (['en', 'fr'].includes(value)) {
       await configRepository.setLocale(value)
-      channel.send(`TODO locale set to ${await configRepository.getLocale()}`)
+      channel.send(`TODO locale set to ${configRepository.getLocale()}`)
     } else {
       channel.send('TODO invalid locale')
     }

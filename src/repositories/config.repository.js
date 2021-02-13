@@ -14,8 +14,8 @@ class ConfigRepository {
     this.config = config
   }
 
-  async getLocale() {
-    return await this.config.locale
+  getLocale() {
+    return this.config.locale
   }
 
   async setLocale(locale) {

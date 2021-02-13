@@ -43,7 +43,7 @@ async function setLocale(message) {
     channel: { id: channelId },
   } = message
   await configRepository.init(channelId)
-  const locale = await configRepository.getLocale()
+  const locale = configRepository.getLocale()
   i18n.setLocale(locale)
 }
 
