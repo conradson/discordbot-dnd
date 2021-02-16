@@ -2,13 +2,14 @@ const Discord = require('discord.js')
 const i18n = require('i18n')
 const path = require('path')
 require('dotenv').config()
-const configRepository = require('./commands/config/config.repository')
 const configCommand = require('./commands/config/config.command')
 const purseCommand = require('./commands/purse/purse.command')
+const rollCommand = require('./commands/roll/roll.command')
 
 i18n.configure({
   locales: ['en', 'fr'],
   directory: path.join(__dirname, '/locales'),
+  defaultLocale: process.env.LOCALE_DEFAULT || 'en',
 })
 
 const client = new Discord.Client()
@@ -25,26 +26,19 @@ client.on('message', async function (message) {
   const command = args.shift().substring(prefix.length).toLowerCase()
   // TODO check if command exists
 
-  await setLocale(message)
-
   switch (command) {
     case 'purse':
     case 'p':
       purseCommand(message, args)
+      break
+    case 'roll':
+    case 'r':
+      rollCommand(message, args)
       break
     case 'dndbot':
       configCommand(message, args)
       break
   }
 })
-
-async function setLocale(message) {
-  const {
-    channel: { id: channelId },
-  } = message
-  await configRepository.init(channelId)
-  const locale = configRepository.getLocale()
-  i18n.setLocale(locale)
-}
 
 client.login(process.env.BOT_TOKEN)

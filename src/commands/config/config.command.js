@@ -1,8 +1,11 @@
 const configRepository = require('./config.repository')
 
 module.exports = async (message, args) => {
-  const { channel, member } = message
-  const { id: channelId } = channel
+  const {
+    channel,
+    guild: { id: guildId },
+    member,
+  } = message
 
   if (!member.hasPermission('MANAGE_GUILD')) {
     channel.send('TODO permission denied')
@@ -20,7 +23,7 @@ module.exports = async (message, args) => {
     return
   }
 
-  await configRepository.init(channelId)
+  await configRepository.init(guildId)
   const value = args.length > 0 ? args.shift().toLowerCase() : null
   if (commandsLocale.includes(setting)) {
     if (!value) {

@@ -1,13 +1,14 @@
 const { DataTypes } = require('sequelize')
 const sequelize = require('../../sequelize/config')
+require('dotenv').config()
 
 module.exports = sequelize.define('config', {
-  channelId: {
+  guildId: {
     type: DataTypes.BIGINT,
     allowNull: false,
   },
   locale: {
     type: DataTypes.STRING,
-    defaultValue: 'en',
+    defaultValue: process.env.LOCALE_DEFAULT || 'en',
   },
 })

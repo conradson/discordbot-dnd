@@ -1,16 +1,17 @@
 const configModel = require('./config.model')
 
 class ConfigRepository {
-  async init(channelId) {
-    configModel.sync()
+  async init(guildId) {
+    await configModel.sync()
     let config = await configModel.findOne({
-      where: { channelId: channelId },
+      where: { guildId: guildId },
     })
     if (!config) {
       config = await configModel.create({
-        channelId: channelId,
+        guildId: guildId,
       })
     }
+
     this.config = config
   }
 

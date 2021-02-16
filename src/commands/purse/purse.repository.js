@@ -1,11 +1,10 @@
-const i18n = require('i18n')
 const purseModel = require('./purse.model')
 const purseHelper = require('./purse.helper')
+const { localize } = require('../../helpers/locale.helper')
 
 class PurseRepository {
-  async init(authorId, character) {
-
-    purseModel.sync()
+  async init(authorId, character, locale) {
+    await purseModel.sync()
     let purse = await purseModel.findOne({
       where: { authorId: authorId, character: character },
     })
@@ -20,6 +19,7 @@ class PurseRepository {
         pp: 0,
       })
     }
+    this.locale = locale
     this.purse = purse
   }
 
@@ -36,15 +36,15 @@ class PurseRepository {
   async set(amount) {
     for (const type of amount.split(' ')) {
       const value = parseInt(type.replace(/\D/g, ''))
-      if (type.endsWith(i18n.__('pp'))) {
+      if (type.endsWith(localize('pp', this.locale))) {
         this.purse.pp = value
-      } else if (type.endsWith(i18n.__('gp'))) {
+      } else if (type.endsWith(localize('gp', this.locale))) {
         this.purse.gp = value
-      } else if (type.endsWith(i18n.__('ep'))) {
+      } else if (type.endsWith(localize('ep', this.locale))) {
         this.purse.ep = value
-      } else if (type.endsWith(i18n.__('sp'))) {
+      } else if (type.endsWith(localize('sp', this.locale))) {
         this.purse.sp = value
-      } else if (type.endsWith(i18n.__('cp'))) {
+      } else if (type.endsWith(localize('cp', this.locale))) {
         this.purse.cp = value
       }
     }
@@ -53,7 +53,7 @@ class PurseRepository {
   }
 
   async gain(amount) {
-    const gain = purseHelper.amountToPurse(amount)
+    const gain = purseHelper.amountToPurse(amount, this.locale)
     this.purse.pp += gain.pp
     this.purse.gp += gain.gp
     this.purse.ep += gain.ep
@@ -72,12 +72,12 @@ class PurseRepository {
       cp: this.purse.cp,
     }
     const money = purseHelper.purseToCopper(stash)
-    const total = purseHelper.amountToCopper(amount)
+    const total = purseHelper.amountToCopper(amount, this.locale)
 
     if (total > money) {
       throw new Error('Not enough money')
     }
-    const bill = purseHelper.amountToPurse(amount)
+    const bill = purseHelper.amountToPurse(amount, this.locale)
     const paid = {
       pp: 0,
       gp: 0,

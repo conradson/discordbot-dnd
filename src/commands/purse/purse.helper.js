@@ -1,6 +1,4 @@
-const i18n = require('i18n')
-const constants = require('./purse.constant')
-
+const { localize } = require('../../helpers/locale.helper')
 module.exports = {
   purseToCopper(purse) {
     return (
@@ -12,26 +10,26 @@ module.exports = {
     )
   },
 
-  amountToCopper(amount) {
+  amountToCopper(amount, locale) {
     let total = 0
     for (const type of amount.split(' ')) {
       const value = parseInt(type.replace(/\D/g, ''))
-      if (type.endsWith(i18n.__('pp'))) {
+      if (type.endsWith(localize('pp', locale))) {
         total += value * 1000
-      } else if (type.endsWith(i18n.__('gp'))) {
+      } else if (type.endsWith(localize('gp', locale))) {
         total += value * 100
-      } else if (type.endsWith(i18n.__('ep'))) {
+      } else if (type.endsWith(localize('ep', locale))) {
         total += value * 50
-      } else if (type.endsWith(i18n.__('sp'))) {
+      } else if (type.endsWith(localize('sp', locale))) {
         total += value * 10
-      } else if (type.endsWith(i18n.__('cp'))) {
+      } else if (type.endsWith(localize('cp', locale))) {
         total += value
       }
     }
     return total
   },
 
-  amountToPurse(amount) {
+  amountToPurse(amount, locale) {
     let purse = {
       pp: 0,
       gp: 0,
@@ -41,58 +39,18 @@ module.exports = {
     }
     for (const type of amount.split(' ')) {
       const value = parseInt(type.replace(/\D/g, ''))
-      if (type.endsWith(i18n.__('pp'))) {
+      if (type.endsWith(localize('pp', locale))) {
         purse.pp = value
-      } else if (type.endsWith(i18n.__('gp'))) {
+      } else if (type.endsWith(localize('gp', locale))) {
         purse.gp = value
-      } else if (type.endsWith(i18n.__('ep'))) {
+      } else if (type.endsWith(localize('ep', locale))) {
         purse.ep = value
-      } else if (type.endsWith(i18n.__('sp'))) {
+      } else if (type.endsWith(localize('sp', locale))) {
         purse.sp = value
-      } else if (type.endsWith(i18n.__('cp'))) {
+      } else if (type.endsWith(localize('cp', locale))) {
         purse.cp = value
       }
     }
     return purse
-  },
-
-  purseTotal(purse) {
-    let total = []
-    if (purse.pp > 0) {
-      total.push(`${purse.pp}${constants.PP_EMOJI}`)
-    }
-    if (purse.gp > 0) {
-      total.push(`${purse.gp}${constants.GP_EMOJI}`)
-    }
-    if (purse.ep > 0) {
-      total.push(`${purse.ep}${constants.EP_EMOJI}`)
-    }
-    if (purse.sp > 0) {
-      total.push(`${purse.sp}${constants.SP_EMOJI}`)
-    }
-    if (purse.cp > 0) {
-      total.push(`${purse.cp}${constants.CP_EMOJI}`)
-    }
-    return total
-  },
-
-  purseContent(currency, character) {
-    let result = i18n.__("%s's purse is empty.", character)
-    if (currency.length > 0) {
-      result = i18n.__(
-        "%1$s's purse contains: %2$s",
-        character,
-        currency.join(', ')
-      )
-    }
-    return result
-  },
-
-  purseTransaction(paid, change, character) {
-    let result = i18n.__('%1$s paids %2$s', character, paid.join(', '))
-    if (change.length) {
-      result += i18n.__('and receives %s', change.join(', '))
-    }
-    return result
   },
 }
