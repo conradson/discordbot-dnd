@@ -5,6 +5,8 @@ require('dotenv').config()
 const configCommand = require('./commands/config/config.command')
 const purseCommand = require('./commands/purse/purse.command')
 const rollCommand = require('./commands/roll/roll.command')
+const pollCommand = require('./commands/poll/poll.command')
+const pollRepository = require('./commands/poll/poll.repository')
 
 i18n.configure({
   locales: ['en', 'fr'],
@@ -13,6 +15,12 @@ i18n.configure({
 })
 
 const client = new Discord.Client()
+client.on('messageReactionAdd', (reaction, user) => {
+  pollRepository.update(reaction, user, 'add')
+})
+client.on('messageReactionRemove', (reaction, user) => {
+  pollRepository.update(reaction, user, 'remove')
+})
 client.on('message', async function (message) {
   const prefix = '!'
   if (message.author.bot || !message.content.startsWith(prefix)) {
@@ -28,12 +36,13 @@ client.on('message', async function (message) {
 
   switch (command) {
     case 'purse':
-    case 'p':
       purseCommand(message, args)
       break
     case 'roll':
-    case 'r':
       rollCommand(message, args)
+      break
+    case 'poll':
+      pollCommand(message, args)
       break
     case 'dndbot':
       configCommand(message, args)
